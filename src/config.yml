@@ -1,0 +1,10 @@
+default-percentage: 50
+clear-storms: true
+ignored-worlds:
+    - neworld
+
+# Example custom config of a world
+worlds:
+    world:
+        needed-percentage: 50
+        display-name: "the main world"
