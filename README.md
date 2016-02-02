@@ -24,7 +24,7 @@ v0.2:
 **Features**  
 - Added per-world config for skipping storms
 - Added options for ignoring vanished/afk players when counting  
-- Tracks config version, should be able to auto-upgrade config after this
+- Tracks config version, should be able to auto-upgrade config after this  
 **Code/bugfixes**
 - Don't make 2 plugin objects for each world ya dingus
 - Less hacky way of getting the config for the world class
