@@ -13,15 +13,18 @@ public class PercentSleep extends JavaPlugin {
 
     private HashMap<String, PercentSleepWorld> worlds = new HashMap<String, PercentSleepWorld>();
 
-    private final IEssentials essentials = (IEssentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-    private final VanishPlugin vanish = (VanishPlugin) Bukkit.getServer().getPluginManager().getPlugin("VanishNoPacket");
+    public static IEssentials essentials = (IEssentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+    public static VanishPlugin vanish = (VanishPlugin) Bukkit.getServer().getPluginManager().getPlugin("VanishNoPacket");
+    public static PercentSleep plugin;
 
 
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
         Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepListener(this), this);
+        plugin = this;
 
+        // Hook Vanish/Essentials listeners if the plugins exist
         if (essentials != null) {
             Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepEssentialsListener(this), this);
             this.getLogger().info("Hooked into Essentials");
@@ -40,6 +43,11 @@ public class PercentSleep extends JavaPlugin {
             }
         }
         getLogger().info(this.worlds.toString());
+    }
+
+    @Override
+    public void onDisable() {
+        plugin = null;
     }
 
     public HashMap<String, PercentSleepWorld> getWorlds() {

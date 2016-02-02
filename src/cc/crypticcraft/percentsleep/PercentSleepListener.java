@@ -34,6 +34,7 @@ public class PercentSleepListener implements Listener {
                 Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GOLD + " is no longer sleeping.");
                 world.setPlayersSleeping(world.getPlayersSleeping() - 1);
             }
+            // This runs if the world somehow naturally skipped the night
             else if (!world.isNight() && !skipped) {
                 world.setPlayersSleeping(0);
             }

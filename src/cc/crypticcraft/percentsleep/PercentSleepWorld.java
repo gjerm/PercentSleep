@@ -11,45 +11,47 @@ import org.kitteh.vanish.VanishPlugin;
 public class PercentSleepWorld {
 
     private World world;
-    private int percentageNeeded;
-    private int playersSleeping;
-    private int playerAmount;
-    private FileConfiguration config = Bukkit.getServer().getPluginManager().getPlugin("PercentSleep").getConfig();
     private String displayName;
-    private IEssentials essentials = (IEssentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-    private VanishPlugin vanish = (VanishPlugin) Bukkit.getServer().getPluginManager().getPlugin("VanishNoPacket");
 
-
+    private int percentageNeeded = 0;
+    private int playersSleeping = 0;
+    private boolean skipStorms;
+    private boolean ignoreVanished;
+    private boolean ignoreAfk;
 
     public PercentSleepWorld(World w) {
         this.world = w;
-        this.playersSleeping = 0;
+        FileConfiguration config = PercentSleep.plugin.getConfig();
+
+        // Init config variables
         this.displayName = config.getString("worlds." + this.world.getName() + ".display-name", this.world.getName());
         this.percentageNeeded = config.getInt("worlds." + this.world.getName() + ".needed-percentage", config.getInt("default-percentage", 50));
+        this.skipStorms = config.getBoolean("worlds." + this.world.getName() + ".clear-storms", config.getBoolean("get-storms", false));
+        this.ignoreVanished = config.getBoolean("ignore-vanished", true);
+        this.ignoreAfk = config.getBoolean("ignore-afk", true);
     }
 
     public boolean skipNightIfPossible(boolean bc) {
         if (this.isNight()) {
-            this.playerAmount = this.world.getPlayers().size();
+            int playerAmount = this.world.getPlayers().size();
 
-            if (essentials != null || vanish != null) {
+            if (PercentSleep.essentials != null || PercentSleep.vanish != null) {
                 for (Player p : this.world.getPlayers()) {
-                    if (essentials != null && essentials.getUser(p).isAfk()) {
+                    if (ignoreAfk && PercentSleep.essentials != null && PercentSleep.essentials.getUser(p).isAfk()) {
                         playerAmount--;
-                    } else if (vanish != null && vanish.getManager().isVanished(p)) {
+                    } else if (ignoreVanished && PercentSleep.vanish != null && PercentSleep.vanish.getManager().isVanished(p)) {
                         playerAmount--;
                     }
                 }
             }
-
-            float percentSleeping = ((float) this.playersSleeping / (float) this.playerAmount) * 100.0f;
+            float percentSleeping = ((float) this.playersSleeping / (float) playerAmount) * 100.0f;
 
             if (bc)
                 Bukkit.broadcastMessage(ChatColor.GOLD + "" + ((int) percentSleeping) + "% are sleeping in " + this.displayName + " (" + this.percentageNeeded + "% needed).");
 
             if ((int) percentSleeping >= percentageNeeded) {
                 this.world.setTime(0);
-                if (config.getBoolean("clear-storms")) this.world.setStorm(false);
+                if (this.skipStorms) this.world.setStorm(false);
                 this.playersSleeping = 0;
                 Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Skipping the night in " + this.displayName + ". Rise and shine!");
                 return true;

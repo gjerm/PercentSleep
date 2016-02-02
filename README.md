@@ -12,13 +12,24 @@ Simple Spigot (Minecraft server) plugin to automatically skip the night if a set
 
 ## Todo:  
 - Add options for ignoring vanished/afk players.  
-- Options for more AFK plugins?  
 - Customizable messages  
-- Commands?  
+- Options for more AFK plugins?  
+- Commands? 
 - Permissions?  
-- Per-world option for skipping storms
 
 ## Changelog
+
+v0.2:  
+### Please delete your old configuration before upgrading to take advantage of the new configuration options.  
+**Features**  
+- Added per-world config for skipping storms
+- Added options for ignoring vanished/afk players when counting  
+- Tracks config version, should be able to auto-upgrade config after this
+**Code/bugfixes**
+- Don't make 2 plugin objects for each world ya dingus
+- Less hacky way of getting the config for the world class
+- Don't broadcast on player leave
+
 
 v0.1:  
 - Initial release (working state)

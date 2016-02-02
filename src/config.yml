@@ -1,10 +1,22 @@
+# Please don't change this
+config-version: '0.2'
+
+# Default values if no per-world config is found
 default-percentage: 50
 clear-storms: true
+
+# Should we ignore certain players?
+ignore-vanished: true
+ignore-afk: true
+
+# These won't get calculated or broadcasted for. (No need to add the end or nether here)
 ignored-worlds:
     - neworld
+    - staff
 
 # Example custom config of a world
 worlds:
     world:
         needed-percentage: 50
         display-name: "the main world"
+        skip-storms: true
