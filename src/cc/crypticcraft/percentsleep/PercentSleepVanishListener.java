@@ -16,7 +16,7 @@ public class PercentSleepVanishListener implements Listener {
 
     @EventHandler
     public void onVanishEvent(VanishStatusChangeEvent event) {
-        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
         if (world != null) {
             world.skipNightIfPossible(false);
         }

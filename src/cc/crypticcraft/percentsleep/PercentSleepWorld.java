@@ -10,14 +10,14 @@ import org.kitteh.vanish.VanishPlugin;
 
 public class PercentSleepWorld {
 
-    private World world;
-    private String displayName;
+    private final World world;
+    private final String displayName;
+    private int playersSleeping;
 
-    private int percentageNeeded = 0;
-    private int playersSleeping = 0;
-    private boolean skipStorms;
-    private boolean ignoreVanished;
-    private boolean ignoreAfk;
+    private final int percentageNeeded;
+    private final boolean skipStorms;
+    private final boolean ignoreVanished;
+    private final boolean ignoreAfk;
 
     public PercentSleepWorld(World w) {
         this.world = w;
@@ -44,7 +44,7 @@ public class PercentSleepWorld {
                     }
                 }
             }
-            float percentSleeping = ((float) this.playersSleeping / (float) playerAmount) * 100.0f;
+            final float percentSleeping = ((float) this.playersSleeping / (float) playerAmount) * 100.0f;
 
             if (bc)
                 Bukkit.broadcastMessage(ChatColor.GOLD + "" + ((int) percentSleeping) + "% are sleeping in " + this.displayName + " (" + this.percentageNeeded + "% needed).");
@@ -69,9 +69,6 @@ public class PercentSleepWorld {
         return playersSleeping;
     }
 
-    public World getWorld() {
-        return this.world;
-    }
 
     public boolean isNight() {
         return this.world.getTime() < 24000 && this.world.getTime() > 12530;

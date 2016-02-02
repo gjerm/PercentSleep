@@ -19,6 +19,12 @@ Simple Spigot (Minecraft server) plugin to automatically skip the night if a set
 
 ## Changelog
 
+v0.3:
+
+- Fixed a bug where Essentials/Vanish didn't get hooked
+- More final variables
+- Fixed a bug where vanished/afk players could sleep and mess up the calculation (dividing by zero, oh noes)
+
 v0.2:  
 ### Please delete your old configuration before upgrading to take advantage of the new configuration options.  
 **Features**  

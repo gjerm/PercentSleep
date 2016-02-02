@@ -17,8 +17,8 @@ public class PercentSleepEssentialsListener implements Listener {
 
     @EventHandler
     public void onAfkStatusChangeEvent(AfkStatusChangeEvent event) {
-        Player p = event.getAffected().getBase();
-        PercentSleepWorld world = plugin.getWorlds().get(p.getWorld().getName());
+        final Player p = event.getAffected().getBase();
+        final PercentSleepWorld world = plugin.getWorlds().get(p.getWorld().getName());
         if (world != null) {
             world.skipNightIfPossible(false);
         }

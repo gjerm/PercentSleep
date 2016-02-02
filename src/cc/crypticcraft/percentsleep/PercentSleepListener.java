@@ -17,8 +17,11 @@ public class PercentSleepListener implements Listener {
 
     @EventHandler
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
-        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
-        if (world != null) {
+        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final boolean playerVanished = PercentSleep.vanish.getManager().isVanished(event.getPlayer());
+        final boolean playerAfk = PercentSleep.essentials.getUser(event.getPlayer()).isAfk();
+
+        if (world != null && !playerVanished && !playerAfk) {
             Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GOLD + " has gone to sleep in " + world.getDisplayName() + ".");
             world.setPlayersSleeping(world.getPlayersSleeping() + 1);
             world.skipNightIfPossible(true);
@@ -27,10 +30,13 @@ public class PercentSleepListener implements Listener {
 
     @EventHandler
     public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
-        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final boolean playerVanished = PercentSleep.vanish.getManager().isVanished(event.getPlayer());
+        final boolean playerAfk = PercentSleep.essentials.getUser(event.getPlayer()).isAfk();
+
         if (world != null) {
             boolean skipped = world.skipNightIfPossible(false);
-            if (world.isNight() && !skipped) {
+            if (world.isNight() && !skipped && !playerVanished && !playerAfk) {
                 Bukkit.broadcastMessage(event.getPlayer().getDisplayName() + ChatColor.GOLD + " is no longer sleeping.");
                 world.setPlayersSleeping(world.getPlayersSleeping() - 1);
             }
@@ -43,7 +49,7 @@ public class PercentSleepListener implements Listener {
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
-        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
         if (world != null) {
             world.skipNightIfPossible(false);
         }
@@ -51,7 +57,7 @@ public class PercentSleepListener implements Listener {
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
-        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
         if (world != null) {
             if (event.getPlayer().isSleeping()) world.setPlayersSleeping(world.getPlayersSleeping() - 1);
             world.skipNightIfPossible(false);
@@ -60,8 +66,8 @@ public class PercentSleepListener implements Listener {
 
     @EventHandler
     public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
-        PercentSleepWorld worldTo = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
-        PercentSleepWorld worldFrom = plugin.getWorlds().get(event.getFrom().getName());
+        final PercentSleepWorld worldTo = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        final PercentSleepWorld worldFrom = plugin.getWorlds().get(event.getFrom().getName());
 
         if (worldTo != null) {
             worldTo.skipNightIfPossible(false);
