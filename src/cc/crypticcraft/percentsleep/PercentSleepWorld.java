@@ -1,12 +1,14 @@
 package cc.crypticcraft.percentsleep;
 
 import com.earth2me.essentials.IEssentials;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
+import de.myzelyam.api.vanish.VanishAPI;
 
 public class PercentSleepWorld {
 
@@ -37,10 +39,13 @@ public class PercentSleepWorld {
 
             if (PercentSleep.essentials != null || PercentSleep.vanish != null) {
                 for (Player p : this.world.getPlayers()) {
+                    PluginManager pm = Bukkit.getPluginManager();
                     if (ignoreAfk && PercentSleep.essentials != null && PercentSleep.essentials.getUser(p).isAfk()) {
                         playerAmount--;
                     } else if (ignoreVanished && PercentSleep.vanish != null && PercentSleep.vanish.getManager().isVanished(p)) {
                         playerAmount--;
+                    } else if (ignoreVanished && (pm.isPluginEnabled("SuperVanish") || pm.isPluginEnabled("PremiumVanish")) && VanishAPI.isInvisible(p)) {
+                        playerAmount--;  
                     }
                 }
             }
