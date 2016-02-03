@@ -3,6 +3,7 @@ package cc.crypticcraft.percentsleep;
 import com.earth2me.essentials.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.VanishPlugin;
 
@@ -36,7 +37,11 @@ public class PercentSleep extends JavaPlugin {
             Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepVanishListener(this), this);
             this.getLogger().info("Hooked into VanishNoPacket");
         }
-
+        PluginManager pm = Bukkit.getPluginManager();
+        if (pm.isPluginEnabled("SuperVanish") || pm.isPluginEnabled("PremiumVanish")) {
+            pm.registerEvents(new SVListener(this), this);
+            this.getLogger().info("Hooked into SuperVanish/PremiumVanish");
+        }
         final List<World> worlds = Bukkit.getWorlds();
         final List<String> ignored = this.getConfig().getStringList("ignored-worlds");
 
