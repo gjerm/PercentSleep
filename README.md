@@ -13,14 +13,18 @@ Simple Spigot (Minecraft server) plugin to automatically skip the night if a set
 ## Todo:  
 - Add options for ignoring vanished/afk players.  
 - Customizable messages  
+- Ratelimit for messages to prevent spam
+- Per-world broadcast instead of broadcasting to everyone
 - Options for more AFK plugins?  
 - Commands? 
 - Permissions?  
 
 ## Changelog
 
-v0.3:
+v0.4:  
+- Added support for SuperVanish/PremiumVanish! (Thanks a lot, MyzelYam)
 
+v0.3:  
 - Fixed a bug where Essentials/Vanish didn't get hooked
 - More final variables
 - Fixed a bug where vanished/afk players could sleep and mess up the calculation (dividing by zero, oh noes)

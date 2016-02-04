@@ -1,13 +1,11 @@
 package cc.crypticcraft.percentsleep;
 
-import com.earth2me.essentials.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.kitteh.vanish.VanishPlugin;
 import de.myzelyam.api.vanish.VanishAPI;
 
 public class PercentSleepWorld {
@@ -23,7 +21,7 @@ public class PercentSleepWorld {
 
     public PercentSleepWorld(World w) {
         this.world = w;
-        FileConfiguration config = PercentSleep.plugin.getConfig();
+        final FileConfiguration config = PercentSleep.plugin.getConfig();
 
         // Init config variables
         this.displayName = config.getString("worlds." + this.world.getName() + ".display-name", this.world.getName());
@@ -36,25 +34,25 @@ public class PercentSleepWorld {
     public boolean skipNightIfPossible(boolean bc) {
         if (this.isNight()) {
             int playerAmount = this.world.getPlayers().size();
-
-            if (PercentSleep.essentials != null || PercentSleep.vanish != null) {
+            PluginManager pm = Bukkit.getPluginManager();
+            if (PercentSleep.anyPluginsHooked) {
                 for (Player p : this.world.getPlayers()) {
-                    PluginManager pm = Bukkit.getPluginManager();
-                    if (ignoreAfk && PercentSleep.essentials != null && PercentSleep.essentials.getUser(p).isAfk()) {
+                    if (ignoreAfk && pm.isPluginEnabled("Essentials") && PercentSleep.essentials.getUser(p).isAfk()) {
                         playerAmount--;
-                    } else if (ignoreVanished && PercentSleep.vanish != null && PercentSleep.vanish.getManager().isVanished(p)) {
+                    } else if (ignoreVanished && pm.isPluginEnabled("VanishNoPacket") && PercentSleep.vanish.getManager().isVanished(p)) {
                         playerAmount--;
                     } else if (ignoreVanished && (pm.isPluginEnabled("SuperVanish") || pm.isPluginEnabled("PremiumVanish")) && VanishAPI.isInvisible(p)) {
-                        playerAmount--;  
+                        playerAmount--;
                     }
                 }
             }
-            final float percentSleeping = ((float) this.playersSleeping / (float) playerAmount) * 100.0f;
+
+            final int percentSleeping = (int) (((float) this.playersSleeping / (float) playerAmount) * 100.0f);
 
             if (bc)
-                Bukkit.broadcastMessage(ChatColor.GOLD + "" + ((int) percentSleeping) + "% are sleeping in " + this.displayName + " (" + this.percentageNeeded + "% needed).");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "" + (percentSleeping) + "% are sleeping in " + this.displayName + " (" + this.percentageNeeded + "% needed).");
 
-            if ((int) percentSleeping >= percentageNeeded) {
+            if (percentSleeping >= percentageNeeded) {
                 this.world.setTime(0);
                 if (this.skipStorms) this.world.setStorm(false);
                 this.playersSleeping = 0;

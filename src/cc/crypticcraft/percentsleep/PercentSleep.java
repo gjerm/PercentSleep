@@ -17,6 +17,7 @@ public class PercentSleep extends JavaPlugin {
     public static IEssentials essentials;
     public static VanishPlugin vanish;
     public static PercentSleep plugin;
+    public static boolean anyPluginsHooked = false;
 
 
     @Override
@@ -24,24 +25,28 @@ public class PercentSleep extends JavaPlugin {
         this.saveDefaultConfig();
         Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepListener(this), this);
         plugin = this;
+        PluginManager pm = Bukkit.getServer().getPluginManager();
 
         // Hook Vanish/Essentials listeners if the plugins exist
         essentials = (IEssentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
         if (essentials != null) {
-            Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepEssentialsListener(this), this);
+            pm.registerEvents(new PercentSleepEssentialsListener(this), this);
+            anyPluginsHooked = true;
             this.getLogger().info("Hooked into Essentials");
         }
 
         vanish = (VanishPlugin) Bukkit.getServer().getPluginManager().getPlugin("VanishNoPacket");
         if (vanish != null) {
-            Bukkit.getServer().getPluginManager().registerEvents(new PercentSleepVanishListener(this), this);
+            pm.registerEvents(new PercentSleepVanishListener(this), this);
+            anyPluginsHooked = true;
             this.getLogger().info("Hooked into VanishNoPacket");
         }
-        PluginManager pm = Bukkit.getPluginManager();
-        if (pm.isPluginEnabled("SuperVanish") || pm.isPluginEnabled("PremiumVanish")) {
+        if (pm.getPlugin("SuperVanish") != null || pm.getPlugin("PremiumVanish") != null) {
             pm.registerEvents(new SVListener(this), this);
+            anyPluginsHooked = true;
             this.getLogger().info("Hooked into SuperVanish/PremiumVanish");
         }
+
         final List<World> worlds = Bukkit.getWorlds();
         final List<String> ignored = this.getConfig().getStringList("ignored-worlds");
 

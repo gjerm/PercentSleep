@@ -1,6 +1,7 @@
 package cc.crypticcraft.percentsleep;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 
@@ -14,9 +15,9 @@ public class PercentSleepVanishListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVanishEvent(VanishStatusChangeEvent event) {
-        final PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
+        PercentSleepWorld world = plugin.getWorlds().get(event.getPlayer().getWorld().getName());
         if (world != null) {
             world.skipNightIfPossible(false);
         }

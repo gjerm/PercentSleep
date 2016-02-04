@@ -11,7 +11,7 @@ public class SVListener implements Listener {
 
     private final PercentSleep plugin;
 
-    public PercentSleepVanishListener(PercentSleep plugin) {
+    public SVListener(PercentSleep plugin) {
         this.plugin = plugin;
     }
 
