@@ -2,6 +2,8 @@
 
 Simple Spigot (Minecraft server) plugin to automatically skip the night if a set percentage of the people in the world are sleeping.
 
+[Spigot resource link](https://www.spigotmc.org/resources/percentsleep.17833/)
+
 ## Features:  
 - Ignores vanished players (VanishNoPacket) and AFK players (Esentials)  
 - You don't need VanishNoPacket or Essentials, it'll support them if they exist on the server.
